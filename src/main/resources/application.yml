@@ -1,4 +1,13 @@
-
+spring.profiles.active: development
+---
+spring:
+  profiles: development
+eureka:
+  client:
+    enabled: false
+---
+spring:
+  profiles: production
 eureka:
   instance:
     prefer-ip-address: true

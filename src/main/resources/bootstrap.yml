@@ -1,4 +1,14 @@
+spring.profiles.active: development
+---
 spring:
+  profiles: development
+  application:
+    name: basket-service
+server:
+  port: 8881
+---
+spring:
+  profiles: production
   application:
     name: basket-service
 server:

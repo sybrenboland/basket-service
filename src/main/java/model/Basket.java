@@ -1,4 +1,4 @@
-package demo;
+package model;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ public class Basket {
 
     private long id;
     private List<Product> productList;
+
+    public Basket() {}
 
     public Basket(long id, List<Product> productList) {
         this.id = id;

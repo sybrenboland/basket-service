@@ -29,4 +29,3 @@ script:
 after_success:
 - docker login -u $DOCKER_USER -p $DOCKER_PASS
 - docker push shboland/basket-service
-- bash <(curl -s https://codecov.io/bash)

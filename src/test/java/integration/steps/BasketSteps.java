@@ -10,23 +10,16 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import resource.BasketApplication;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -63,17 +56,17 @@ public class BasketSteps {
     }
 
     @Given("^I have a basket")
-    public void i_have_a_basket() throws Throwable {
+    public void iHaveABasket() throws Throwable {
         assertNotNull(basket);
     }
 
     @Given("^I have a correct basketId")
-    public void i_have_a_correct_basketId() throws Throwable {
+    public void iHaveACorrectBasketId() throws Throwable {
         assertNotNull(basketId);
     }
 
     @When("^I ask for the basket")
-    public void i_ask_for_the_basket() throws Throwable {
+    public void iAskForTheBasket() throws Throwable {
 
         HttpGet request = new HttpGet(SERVICE_URL + "/2");
         request.addHeader("accept", APPLICATION_JSON);
@@ -81,7 +74,7 @@ public class BasketSteps {
     }
 
     @When("^I add a product to the basket")
-    public void i_add_a_product_to_the_basket() throws Throwable {
+    public void iAddAProductToTheBasket() throws Throwable {
 
         HttpPost request = new HttpPost(SERVICE_URL + "/2/product");
         request.addHeader("content-type", "application/json");
@@ -91,7 +84,7 @@ public class BasketSteps {
     }
 
     @Then("^(?:I get|the user gets) a '(.*)' response$")
-    public void I_get_a__response(final String statusCode) throws Throwable {
+    public void iGetAXResponse(final String statusCode) throws Throwable {
         assertThat(HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
                 is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
     }

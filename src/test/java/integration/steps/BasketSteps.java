@@ -6,9 +6,12 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import model.Basket;
 import model.Product;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,8 @@ public class BasketSteps {
     private Basket basket;
     private long basketId;
 
+    private String jsonProduct;
+
     @Before
     public void setUp() {
         List<Product> productList = new ArrayList();
@@ -53,6 +58,8 @@ public class BasketSteps {
 
         basketId = 7L;
         basket = new Basket(basketId, productList);
+
+        jsonProduct = "{\"id\":\"3\",\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
     }
 
     @Given("^I have a basket")
@@ -77,7 +84,9 @@ public class BasketSteps {
     public void i_add_a_product_to_the_basket() throws Throwable {
 
         HttpPost request = new HttpPost(SERVICE_URL + "/basket/product");
-        request.addHeader("accept", APPLICATION_JSON);
+        request.addHeader("content-type", "application/json");
+        HttpEntity bodyEntity = new StringEntity(jsonProduct);
+        request.setEntity(bodyEntity);
         response = httpClient.execute(request);
     }
 

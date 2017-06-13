@@ -6,6 +6,11 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import model.Basket;
 import model.Product;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,8 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import resource.BasketApplication;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -25,12 +33,14 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration
 public class BasketSteps {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private static final String SERVICE_URL = "http://localhost:8881";
+    private static final String APPLICATION_JSON = "application/json";
+    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+
+    private HttpResponse response;
 
     private Basket basket;
-
-    private ResponseEntity<Basket> responseEntity;
+    private long basketId;
 
     @Before
     public void setUp() {
@@ -41,7 +51,8 @@ public class BasketSteps {
         Product product2 = new Product(2, "Suede poof", "Original maroccan poof.");
         productList.add(product2);
 
-        basket = new Basket(7L, productList);
+        basketId = 7L;
+        basket = new Basket(basketId, productList);
     }
 
     @Given("^I have a basket")
@@ -49,15 +60,30 @@ public class BasketSteps {
         assertNotNull(basket);
     }
 
+    @Given("^I have a correct basketId")
+    public void i_have_a_correct_basketId() throws Throwable {
+        assertNotNull(basketId);
+    }
+
     @When("^I ask for the basket")
     public void i_ask_for_the_basket() throws Throwable {
 
-        responseEntity = restTemplate
-                .getForEntity("http://localhost:8881".concat("/").concat("basket"), Basket.class);
+        HttpGet request = new HttpGet(SERVICE_URL + "/basket");
+        request.addHeader("accept", APPLICATION_JSON);
+        response = httpClient.execute(request);
+    }
+
+    @When("^I add a product to the basket")
+    public void i_add_a_product_to_the_basket() throws Throwable {
+
+        HttpPost request = new HttpPost(SERVICE_URL + "/basket/product");
+        request.addHeader("accept", APPLICATION_JSON);
+        response = httpClient.execute(request);
     }
 
     @Then("^(?:I get|the user gets) a '(.*)' response$")
     public void I_get_a__response(final String statusCode) throws Throwable {
-        assertThat(responseEntity.getStatusCode(), is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
+        assertThat(HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
+                is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
     }
 }

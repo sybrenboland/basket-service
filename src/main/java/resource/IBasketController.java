@@ -5,12 +5,12 @@ import model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/basket")
+@RequestMapping("/baskets")
 public interface IBasketController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    Basket getBasket(@RequestParam(value="basketId", defaultValue = "1") String basketId);
+    @RequestMapping(path = "/{basketId}", method = RequestMethod.GET)
+    Basket getBasket(@PathVariable String basketId);
 
-    @RequestMapping(path = "/product", method = RequestMethod.POST)
-    ResponseEntity addProduct(@RequestParam(value="basketId", defaultValue = "1") String basketId, @RequestBody Product product);
+    @RequestMapping(path = "/{basketId}/product", method = RequestMethod.POST)
+    ResponseEntity addProduct(@PathVariable String basketId, @RequestBody Product product);
 }

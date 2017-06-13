@@ -36,14 +36,14 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration
 public class BasketSteps {
 
-    private static final String SERVICE_URL = "http://localhost:8881";
+    private static final String SERVICE_URL = "http://localhost:8881/baskets";
     private static final String APPLICATION_JSON = "application/json";
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     private HttpResponse response;
 
     private Basket basket;
-    private long basketId;
+    private String basketId;
 
     private String jsonProduct;
 
@@ -51,12 +51,12 @@ public class BasketSteps {
     public void setUp() {
         List<Product> productList = new ArrayList();
 
-        Product product1 = new Product(1, "Wooden chair", "This is a oak hand made chair.");
+        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
         productList.add(product1);
-        Product product2 = new Product(2, "Suede poof", "Original maroccan poof.");
+        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
         productList.add(product2);
 
-        basketId = 7L;
+        basketId = "7";
         basket = new Basket(basketId, productList);
 
         jsonProduct = "{\"id\":\"3\",\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
@@ -75,7 +75,7 @@ public class BasketSteps {
     @When("^I ask for the basket")
     public void i_ask_for_the_basket() throws Throwable {
 
-        HttpGet request = new HttpGet(SERVICE_URL + "/basket");
+        HttpGet request = new HttpGet(SERVICE_URL + "/2");
         request.addHeader("accept", APPLICATION_JSON);
         response = httpClient.execute(request);
     }
@@ -83,7 +83,7 @@ public class BasketSteps {
     @When("^I add a product to the basket")
     public void i_add_a_product_to_the_basket() throws Throwable {
 
-        HttpPost request = new HttpPost(SERVICE_URL + "/basket/product");
+        HttpPost request = new HttpPost(SERVICE_URL + "/2/product");
         request.addHeader("content-type", "application/json");
         HttpEntity bodyEntity = new StringEntity(jsonProduct);
         request.setEntity(bodyEntity);

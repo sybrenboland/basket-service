@@ -9,34 +9,34 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class BasketController implements IBasketController {
 
-    private final AtomicLong counter = new AtomicLong();
-
     private List<Product> productList = new ArrayList<>();
 
     public BasketController() {
-        Product product1 = new Product(1, "Wooden chair", "This is a oak hand made chair.");
+        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
         productList.add(product1);
-        Product product2 = new Product(2, "Suede poof", "Original maroccan poof.");
+        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
         productList.add(product2);
     }
 
     @Override
-    public Basket getBasket(String basketId) {
-        return new Basket(counter.incrementAndGet(), this.productList);
+    public Basket getBasket(@PathVariable String basketId) {
+        return new Basket(basketId, this.productList);
     }
 
     @Override
-    public ResponseEntity addProduct(String basketId, @RequestBody Product product) {
+    public ResponseEntity addProduct(@PathVariable String basketId, @RequestBody Product product) {
+
+        System.out.println("BasketId in the controller: " + basketId);
 
         this.productList.add(product);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
+                .path("/" + basketId)
                 .buildAndExpand().toUri();
 
         return ResponseEntity.created(location).build();

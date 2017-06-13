@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@RequestMapping("/basket")
-public class BasketController {
+public class BasketController implements IBasketController {
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -26,13 +25,13 @@ public class BasketController {
         productList.add(product2);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Basket getBasket(@RequestParam(value="basketId", defaultValue = "1") String basketId) {
+    @Override
+    public Basket getBasket(String basketId) {
         return new Basket(counter.incrementAndGet(), this.productList);
     }
 
-    @RequestMapping(path = "/product", method = RequestMethod.POST)
-    ResponseEntity addProduct(@RequestParam(value="basketId", defaultValue = "1") String basketId, @RequestBody Product product) {
+    @Override
+    public ResponseEntity addProduct(String basketId, @RequestBody Product product) {
 
         this.productList.add(product);
 

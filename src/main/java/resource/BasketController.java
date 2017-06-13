@@ -30,8 +30,6 @@ public class BasketController implements IBasketController {
     @Override
     public ResponseEntity addProduct(@PathVariable String basketId, @RequestBody Product product) {
 
-        System.out.println("BasketId in the controller: " + basketId);
-
         this.productList.add(product);
 
         URI location = ServletUriComponentsBuilder

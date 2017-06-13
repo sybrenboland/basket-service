@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Basket {
 
-    private long id;
+    private String id;
     private List<Product> productList;
 
     public Basket() {}
 
-    public Basket(long id, List<Product> productList) {
+    public Basket(String id, List<Product> productList) {
         this.id = id;
         this.productList = productList;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 

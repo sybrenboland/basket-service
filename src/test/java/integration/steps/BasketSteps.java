@@ -1,11 +1,15 @@
 package integration.steps;
 
+import com.amazonaws.util.IOUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import model.Basket;
-import model.Product;
+import org.apache.http.Header;
+import org.shboland.BasketApplication;
+import org.shboland.model.basket.Basket;
+import org.shboland.model.product.Product;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,14 +20,19 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
-import resource.BasketApplication;
 
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 @SpringBootTest(classes = BasketApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration
@@ -34,58 +43,71 @@ public class BasketSteps {
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     private HttpResponse response;
-
-    private Basket basket;
     private String basketId;
 
-    private String jsonProduct;
+    private String jsonBasket = "{\"productList\":[]}";
+    private String jsonProduct = "{\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
 
     @Before
-    public void setUp() {
-        List<Product> productList = new ArrayList();
+    public void clean() {
 
-        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
-        productList.add(product1);
-        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
-        productList.add(product2);
-
-        basketId = "7";
-        basket = new Basket(basketId, productList);
-
-        jsonProduct = "{\"id\":\"3\",\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
     }
 
-    @Given("^I have a basket")
-    public void iHaveABasket() throws Throwable {
-        assertNotNull(basket);
-    }
+    @Given("^The basket contains '(.*)' products")
+    public void theBasketContainsXProducts(final String numberOfProducts) throws Throwable {
 
-    @Given("^I have a correct basketId")
-    public void iHaveACorrectBasketId() throws Throwable {
-        assertNotNull(basketId);
+        HttpPost request = new HttpPost(SERVICE_URL);
+        request.addHeader("content-type", "application/json");
+        HttpEntity bodyEntity = new StringEntity(jsonBasket);
+        request.setEntity(bodyEntity);
+        HttpResponse response = httpClient.execute(request);
+        assertEquals("Basket was not created correctly.",
+                HttpStatus.CREATED, HttpStatus.valueOf(response.getStatusLine().getStatusCode()));
+        Header[] headers = response.getAllHeaders();
+        Header locationHeader = Arrays.stream(headers).filter(h -> h.getName().equals("Location")).findFirst().get();
+        basketId = last(locationHeader.getValue().split("/"));
+
+        IntStream.range(0, Integer.valueOf(numberOfProducts)).forEach(i -> {
+            try {
+                addProduct();
+            } catch(Exception e) {}
+        });
     }
 
     @When("^I ask for the basket")
     public void iAskForTheBasket() throws Throwable {
 
-        HttpGet request = new HttpGet(SERVICE_URL + "/2");
+        HttpGet request = new HttpGet(SERVICE_URL + "/" + basketId);
         request.addHeader("accept", APPLICATION_JSON);
         response = httpClient.execute(request);
     }
 
     @When("^I add a product to the basket")
     public void iAddAProductToTheBasket() throws Throwable {
+        addProduct();
+    }
 
-        HttpPost request = new HttpPost(SERVICE_URL + "/2/product");
+    @Then("^(?:I get|the user gets) a list with '(.*)' products$")
+    public void iGetAListWithXProducts(final String numberOfProducts) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+
+        InputStream inputStream = response.getEntity().getContent();
+        String inputString = IOUtils.toString(inputStream);
+
+        Basket basket = mapper.readValue(inputString, Basket.class);
+        assertEquals("Not right number of products returned.",
+                Integer.valueOf(numberOfProducts), basket.getProductList().size());
+    }
+
+    private void addProduct() throws Exception {
+        HttpPost request = new HttpPost(SERVICE_URL + "/" + basketId + "/products");
         request.addHeader("content-type", "application/json");
         HttpEntity bodyEntity = new StringEntity(jsonProduct);
         request.setEntity(bodyEntity);
         response = httpClient.execute(request);
     }
 
-    @Then("^(?:I get|the user gets) a '(.*)' response$")
-    public void iGetAXResponse(final String statusCode) throws Throwable {
-        assertThat(HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
-                is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
+    public static <T> T last(T[] array) {
+        return array[array.length - 1];
     }
 }

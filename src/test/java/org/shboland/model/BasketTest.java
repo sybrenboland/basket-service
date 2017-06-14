@@ -1,6 +1,9 @@
-package model;
+package org.shboland.model;
 
 import org.junit.Test;
+import org.shboland.model.basket.Basket;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertNotNull;
 

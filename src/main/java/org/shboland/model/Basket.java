@@ -1,4 +1,4 @@
-package model;
+package org.shboland.model;
 
 import java.util.List;
 
@@ -6,8 +6,6 @@ public class Basket {
 
     private String id;
     private List<Product> productList;
-
-    public Basket() {}
 
     public Basket(String id, List<Product> productList) {
         this.id = id;

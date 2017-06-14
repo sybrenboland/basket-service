@@ -14,6 +14,6 @@ public interface IBasketController {
     @RequestMapping(path = "/{basketId}", method = RequestMethod.GET)
     Basket getBasket(@PathVariable String basketId);
 
-    @RequestMapping(path = "/{basketId}/product", method = RequestMethod.POST)
+    @RequestMapping(path = "/{basketId}/products", method = RequestMethod.POST)
     ResponseEntity addProduct(@PathVariable String basketId, @RequestBody Product product);
 }

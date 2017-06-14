@@ -1,6 +1,7 @@
 package org.shboland.model;
 
 import org.junit.Test;
+import org.shboland.model.basket.Basket;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,6 @@ public class BasketTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull("Constructor does not create object", new Basket("1", new ArrayList<>()));
+        assertNotNull("Constructor does not create object", new Basket());
     }
 }

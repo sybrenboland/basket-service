@@ -1,7 +1,7 @@
 package org.shboland.resource;
 
-import org.shboland.model.Basket;
-import org.shboland.model.Product;
+import org.shboland.model.basket.Basket;
+import org.shboland.model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,29 +1,24 @@
 package org.shboland.service;
 
-import org.shboland.model.Basket;
-import org.shboland.model.Product;
+import org.shboland.model.basket.Basket;
+import org.shboland.model.basket.BasketRepository;
+import org.shboland.model.product.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class BasketService {
 
-    private List<Product> productList = new ArrayList<>();
-
-    public BasketService() {
-        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
-        productList.add(product1);
-        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
-        productList.add(product2);
-    }
+    @Autowired
+    private BasketRepository basketRepository;
 
     public Basket fetchBasket(String basketId) {
-        return new Basket(basketId, this.productList);
+        return basketRepository.findOne(Long.valueOf(basketId));
     }
 
     public void addProduct(String basketId, Product product) {
-        this.productList.add(product);
+        Basket basket = basketRepository.findOne(Long.valueOf(basketId));
+        basket.getProductList().add(product);
+        basketRepository.save(basket);
     }
 }

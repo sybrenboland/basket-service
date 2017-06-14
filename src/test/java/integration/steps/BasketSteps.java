@@ -5,8 +5,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.shboland.BasketApplication;
-import org.shboland.model.Basket;
-import org.shboland.model.Product;
+import org.shboland.model.basket.Basket;
+import org.shboland.model.product.Product;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -40,52 +40,52 @@ public class BasketSteps {
 
     private String jsonProduct;
 
-    @Before
-    public void setUp() {
-        List<Product> productList = new ArrayList();
-
-        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
-        productList.add(product1);
-        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
-        productList.add(product2);
-
-        basketId = "7";
-        basket = new Basket(basketId, productList);
-
-        jsonProduct = "{\"id\":\"3\",\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
-    }
-
-    @Given("^I have a basket")
-    public void iHaveABasket() throws Throwable {
-        assertNotNull(basket);
-    }
-
-    @Given("^I have a correct basketId")
-    public void iHaveACorrectBasketId() throws Throwable {
-        assertNotNull(basketId);
-    }
-
-    @When("^I ask for the basket")
-    public void iAskForTheBasket() throws Throwable {
-
-        HttpGet request = new HttpGet(SERVICE_URL + "/2");
-        request.addHeader("accept", APPLICATION_JSON);
-        response = httpClient.execute(request);
-    }
-
-    @When("^I add a product to the basket")
-    public void iAddAProductToTheBasket() throws Throwable {
-
-        HttpPost request = new HttpPost(SERVICE_URL + "/2/product");
-        request.addHeader("content-type", "application/json");
-        HttpEntity bodyEntity = new StringEntity(jsonProduct);
-        request.setEntity(bodyEntity);
-        response = httpClient.execute(request);
-    }
-
-    @Then("^(?:I get|the user gets) a '(.*)' response$")
-    public void iGetAXResponse(final String statusCode) throws Throwable {
-        assertThat(HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
-                is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
-    }
+//    @Before
+//    public void setUp() {
+//        List<Product> productList = new ArrayList();
+//
+//        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
+//        productList.add(product1);
+//        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
+//        productList.add(product2);
+//
+//        basketId = "7";
+//        basket = new Basket(basketId, productList);
+//
+//        jsonProduct = "{\"id\":\"3\",\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
+//    }
+//
+//    @Given("^I have a basket")
+//    public void iHaveABasket() throws Throwable {
+//        assertNotNull(basket);
+//    }
+//
+//    @Given("^I have a correct basketId")
+//    public void iHaveACorrectBasketId() throws Throwable {
+//        assertNotNull(basketId);
+//    }
+//
+//    @When("^I ask for the basket")
+//    public void iAskForTheBasket() throws Throwable {
+//
+//        HttpGet request = new HttpGet(SERVICE_URL + "/2");
+//        request.addHeader("accept", APPLICATION_JSON);
+//        response = httpClient.execute(request);
+//    }
+//
+//    @When("^I add a product to the basket")
+//    public void iAddAProductToTheBasket() throws Throwable {
+//
+//        HttpPost request = new HttpPost(SERVICE_URL + "/2/product");
+//        request.addHeader("content-type", "application/json");
+//        HttpEntity bodyEntity = new StringEntity(jsonProduct);
+//        request.setEntity(bodyEntity);
+//        response = httpClient.execute(request);
+//    }
+//
+//    @Then("^(?:I get|the user gets) a '(.*)' response$")
+//    public void iGetAXResponse(final String statusCode) throws Throwable {
+//        assertThat(HttpStatus.valueOf(response.getStatusLine().getStatusCode()),
+//                is(HttpStatus.valueOf(Integer.valueOf(statusCode))));
+//    }
 }

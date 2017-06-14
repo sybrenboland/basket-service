@@ -15,7 +15,7 @@ public class Basket {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "BASKET_ID", nullable = false)
     @OneToMany(cascade = CascadeType.ALL, targetEntity = Product.class, orphanRemoval = true)
     private List<Product> productList = new ArrayList<>();
 

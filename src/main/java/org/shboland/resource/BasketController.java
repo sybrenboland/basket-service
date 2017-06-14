@@ -19,6 +19,18 @@ public class BasketController implements IBasketController {
     private BasketService basketService;
 
     @Override
+    public ResponseEntity createBasket(@RequestBody Basket basket) {
+        Long basketId = basketService.createBasket(basket);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/" + basketId)
+                .buildAndExpand().toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @Override
     public Basket getBasket(@PathVariable String basketId) {
         return basketService.fetchBasket(basketId);
     }

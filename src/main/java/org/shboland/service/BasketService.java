@@ -12,6 +12,11 @@ public class BasketService {
     @Autowired
     private BasketRepository basketRepository;
 
+    public Long createBasket(Basket basket) {
+        Basket savedBasket = basketRepository.save(basket);
+        return savedBasket.getId();
+    }
+
     public Basket fetchBasket(String basketId) {
         return basketRepository.findOne(Long.valueOf(basketId));
     }

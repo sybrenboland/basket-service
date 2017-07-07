@@ -1,36 +1,44 @@
 package org.shboland.resource;
 
-import org.shboland.model.Basket;
-import org.shboland.model.Product;
+import org.shboland.model.basket.Basket;
+import org.shboland.model.product.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.shboland.service.BasketService;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class BasketController implements IBasketController {
 
-    private List<Product> productList = new ArrayList<>();
+    @Autowired
+    private BasketService basketService;
 
-    public BasketController() {
-        Product product1 = new Product("1", "Wooden chair", "This is a oak hand made chair.");
-        productList.add(product1);
-        Product product2 = new Product("2", "Suede poof", "Original maroccan poof.");
-        productList.add(product2);
+    @Override
+    public ResponseEntity createBasket(@RequestBody Basket basket) {
+        Long basketId = basketService.createBasket(basket);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/" + basketId)
+                .buildAndExpand().toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Override
     public Basket getBasket(@PathVariable String basketId) {
-        return new Basket(basketId, this.productList);
+        return basketService.fetchBasket(basketId);
     }
 
     @Override
     public ResponseEntity addProduct(@PathVariable String basketId, @RequestBody Product product) {
 
-        this.productList.add(product);
+        basketService.addProduct(basketId, product);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

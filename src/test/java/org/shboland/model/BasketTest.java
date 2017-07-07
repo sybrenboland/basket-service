@@ -1,6 +1,7 @@
 package org.shboland.model;
 
 import org.junit.Test;
+import org.shboland.model.basket.Basket;
 
 import static org.junit.Assert.assertNotNull;
 

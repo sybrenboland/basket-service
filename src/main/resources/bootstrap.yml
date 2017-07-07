@@ -8,6 +8,13 @@ server:
   port: 8881
 ---
 spring:
+  profiles: test
+  application:
+    name: basket-service
+server:
+  port: 8881
+---
+spring:
   profiles: production
   application:
     name: basket-service

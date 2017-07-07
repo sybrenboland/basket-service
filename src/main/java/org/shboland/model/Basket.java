@@ -1,4 +1,4 @@
-package model;
+package org.shboland.model;
 
 import java.util.List;
 

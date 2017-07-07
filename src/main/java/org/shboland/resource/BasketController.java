@@ -1,7 +1,7 @@
-package resource;
+package org.shboland.resource;
 
-import model.Basket;
-import model.Product;
+import org.shboland.model.Basket;
+import org.shboland.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

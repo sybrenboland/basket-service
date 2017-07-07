@@ -2,12 +2,29 @@ spring.profiles.active: development
 ---
 spring:
   profiles: development
+  datasource:
+    url: jdbc:mysql://localhost:3306/dev
+    username: root
+    password: mysqlpass
+    platform: mysql
+liquibase:
+  change-log: classpath:/liquibase/db-changelog.xml
 eureka:
   client:
     enabled: false
 ---
 spring:
   profiles: production
+  jpa:
+    show_sql: false
+    database: MYSQL
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://mysql:3306/dev
+    username: root
+    password: dbpass
+liquibase:
+  change-log: classpath:/liquibase/db-changelog.xml
 eureka:
   instance:
     prefer-ip-address: true

@@ -40,11 +40,6 @@ public class BasketSteps {
     private String jsonBasket = "{\"productList\":[]}";
     private String jsonProduct = "{\"name\":\"Rockingchair\",\"description\":\"Like the one grandma has.\"}";
 
-    @Before
-    public void clean() {
-
-    }
-
     @Given("^The basket contains '(.*)' products")
     public void theBasketContainsXProducts(final String numberOfProducts) throws Throwable {
 

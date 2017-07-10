@@ -21,6 +21,7 @@
         <cucumber.version>1.2.5</cucumber.version>
         <docker.image.prefix>shboland</docker.image.prefix>
         <docker.plugin.version>0.4.14</docker.plugin.version>
+        <springfox.version>2.4.0</springfox.version>
         <surefire.version>2.12.1</surefire.version>
         <failsafe.version>2.12.4</failsafe.version>
         <jacoco.version>0.7.1.201405082137</jacoco.version>
@@ -53,6 +54,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
 
         <dependency>

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/baskets")
 public interface IBasketController {
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path = "/", method = RequestMethod.POST)
     ResponseEntity createBasket(@RequestBody Basket basket);
 
     @RequestMapping(path = "/{basketId}", method = RequestMethod.GET)

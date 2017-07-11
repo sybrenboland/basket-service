@@ -1,7 +1,7 @@
 mysql:
   image: mysql:5.7
   ports:
-   - 3306:3306
+   - 3381:3306
   environment:
    - MYSQL_ROOT_PASSWORD=mysqlpass
-   - MYSQL_DATABASE=dev
+   - MYSQL_DATABASE=basketDB

@@ -33,7 +33,7 @@ spring:
     database: MYSQL
     generate-ddl: true
   datasource:
-    url: jdbc:mysql://mysql:3381/basketDB
+    url: jdbc:mysql://mysql:3306/basketDB
     username: root
     password: dbpass
 liquibase:

@@ -1,24 +1,26 @@
 sudo: required
 services:
 - docker
+
 language: java
 jdk:
 - oraclejdk8
+
 env:
   global:
   - COMMIT: "${TRAVIS_COMMIT::6}"
   - secure: UB54Qy8DDLXIbNzxWgo7CcYzmP+rBp1teP8bFtXBEapYO8tRdJMPvmr7pXZIdkTGCQ/X+O/NmznzGkBrKLv/DyY1Dh1gNClgnt/u3h4PGGR97VZlBNbh/udq+yCXpPK8oSW0oAvCgc0rD+TKO+1Xv/7pmnF3szGBNFn7FFy7vkT1WJF8Vye4rxCR+RoxgVZordw3k0hk544Wu/GvZeLizLYIwU1kg3e944UjfbuOz/J0J+JQjj+C+bCIA4PGS919KR5TJSUKNL9CYAbqKZOIhkbtKoH60IaTajIuQKsxku7ed3squTmRfokhZEI7Y9+2qqZk4BjNN+fh0LDDASpOlbLOtNKq4meax58yZx4w9MzoeIhFKwxsZFALUk2McMKpVOX4XkQjB39KgfhIA3Wcs6EqhqjudYWfegJxacuBQI6c5SruOJnzFK/SPcopKb4evBiPf2TD55/8bQWS2B/TfFwsHi0xVnTijJZNeG0inmaV29eRC5jQ+zjnS2QFKQ8I6OZi7ZCO+Z1oxq08tLyboVZTkJ5UmXJ053YkVhz6Q0dDGl5vYv++kFTxOaF/kj9g3vyaePOY5UPyCvWkBnJy8cIhnyrH2ZTQvbPJhWaKScBVytC16bx38VXhX+4LWDdBnJ+G+Z26m+9tKXfBN1gPHZ/bxb1SUhHfAEj+UQM3NgE=
   - secure: q7UAYyE0XEjWskP7UkBbCuxUDE1ENBcj9Gzrd8bOSNlkXmptDAG4SqANMjxPT6zl5sr4rWWDb+PNTeIFyL5d0P8l55cOn54YbGbAhdswNYJTN61NKdHv1QlwGiKNXXalOpkkDhD1tl3So5WmKtlMd56QyJycjjQDq7khKvPci5ucVtjZhau2jXwxoLx7fkGB+iXnf+C0y6hGqVQgsIEjzIo7utQJ3Y4jsdzE89UUSRvZEj5oqjIQhjlK1++GSJdbtJVF5elFJT5YmwaSm2lmemRLEoOFJHlj05narRz10/SXvReEMA9TqKNGScDO4X0nfca3nRmYpjmA27wcG4dRlNqSrriajfWKHz9Ui1MbLMLAmgCS5RnVw5q+I7p++79EMdr3bL0a4cPzmjIML82QY5/YgVnRC/7qTF0KdaRA9tu9GVJ6m+XVg1q1PowbLAy92HsfCFtulUbN0c8O+PFfoHCHoDqFu7CNBQaIBJeu5fUJ86uJ40fihCLWR0doBwf0v7IfOc+rsgPnEYDb9eWLHfzr2GWJWxnhFoX+6KyhE1j08VN+ZMnVcwRlyKt362yl+/2GL0CyCuS7HS481QIU48Yw9ogTURA+60ZfDukUVzmAX6Bto9jSCVvMBmujft7U194t6x0yyYkNBRWNAB/3PS+ZJYnj0U3U1zHYJEX8TSU=
   - secure: 1OUnrvXYVusQe5lIXeQYOSNKhivuVObYH3fTvxWZEuSfaevrydvk4YawCzaEHeTvokf5465FumAKVzM5XkTg9HgiPWaXYD5HDIX6Bpy1v0Doos+3dn+dKTpL3NT/ujZUm0OEr0cYGfaEmR/R43u2r9NZi4Q0KJyTVmaqmgYTWYtUo6nO+yfEwWp7/bj8yWYQoOWsvnpKLPOvsjfFWo8cw1gX/+8FUVnM17zmsPvBL+l6kNunLtrj3RWsiYyG/Kx2aomAe/lXgI0aobJMn5uDTiM4sSHkBZs9XzSX/J9ksCdbQdUkwCNwoVhNGv10Vx79YMqisV2UvKL7erf+UxoBXjreGiS2D9gVtD5Ex4lt3wWIzxQl3iu+bS1CyGYecLylBfGbz3b6gMbISOfaVVkFH8V4Yqx21y3bbSU00AewiPne4x5IALcncpAOz/Sj05x56vtV8CBr+pfbfZaO2Re5bf2nlAubvNN21Gf7VAHtWqeGJ65YS/VpHAF5JulntpcjsPBVFR5dn1G/w292BDLIPvhaSCQhjrg/iG+2f9JDCba/vCDcjbSyOuk2h0tNtpLpzJvopMBUGhiOD2TAoUX63QN8CZwXLC1AFGBGE2ye2lH4qWiBhpnEsbXZg0AKtXBsCiTkaTPvuza83r8zJvXPyvNCUhaWqHniOLLKRPZh26c=
-addons:
-  sonarqube:
-    organization: sybrenboland-github
+
 cache:
   directories:
   - "$HOME/.m2"
   - "$HOME/.sonar/cache"
+
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+- mvn clean install
+
 after_success:
 - docker login -u $DOCKER_USER -p $DOCKER_PASS
 - docker push shboland/basket-service

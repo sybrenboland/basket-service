@@ -5,3 +5,4 @@ mysql:
   environment:
    - MYSQL_ROOT_PASSWORD=mysqlpass
    - MYSQL_DATABASE=basketDB
+
